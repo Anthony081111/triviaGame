@@ -9,7 +9,10 @@ def get_help():
     >Score without overrides: This is your score, not counting the override codes.
     >Modes:
     -->Normal: The normal way to play: Override codes, "I don't know" allowed.
-    -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing."""
+    -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
+    -->Hard: No overrides and "I don't know" allowed.
+    -->Expert: You have 3 lives. No overrides and a light punishment for "I don't know".
+    -->Free: No points, just basic fun."""
     return help_screen
 
 
