@@ -5,8 +5,8 @@ import time
 
 # question_list, q_and_a_dict = tools.get_dict()
 
-question_list = ["Q1", "Q2", "Q3"]
-q_and_a_dict = {"Q1": "A1", "Q2": "A2", "Q3": "A3"}
+question_list = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
+q_and_a_dict = {"Q1": "A1", "Q2": "A2", "Q3": "A3", "Q4": "A4", "Q5": "A5", "Q6": "A6"}
 score = 0
 overscore = 0
 set_number_i = 2
@@ -14,6 +14,7 @@ choice_loop = True
 mode_loop = True
 lives = 3
 
+timer = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 timed = False
 hard = False
 free = False
@@ -37,6 +38,7 @@ elif help_maybe == "reset":
     quit()
 
 for i in range(len(q_and_a_dict)):
+    lost = False
     question = select.random_item_from_list(question_list)
     try:
         answer = q_and_a_dict[question]
@@ -49,6 +51,7 @@ for i in range(len(q_and_a_dict)):
     while choice_loop:
         question_list.remove(question)
         guess = input(f"The question is: \n{question}\nYour answer:")
+        start = time.time()
         if guess == answer:
             score += 1*multiplier
             overscore += 1*multiplier
@@ -65,6 +68,7 @@ for i in range(len(q_and_a_dict)):
                 print(f"Your score is still: {overscore}")
             elif expert:
                 score -= 1*(multiplier/2)
+                overscore -= 1*(multiplier/2)
                 print(f"Your score is now: {score}")
             choice_loop = False
             ready = input("Type anything when ready.").lower()
@@ -76,15 +80,43 @@ for i in range(len(q_and_a_dict)):
                 overscore -= 1
             elif hard and not expert:
                 score -= 1*(multiplier/2)
+                overscore -= 1*(multiplier/2)
             elif expert:
                 score -= 1*multiplier
+                overscore -= 1*multiplier
                 lives -= 1
+                lost = True
             choice_loop = False
             ready = input("Type anything when ready.").lower()
             if ready == "whoops" and not hard:
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
                 ready = input("Type anything when ready.").lower()
+        end = time.time()
+        elapsed_time = end - start
+        if timed and elapsed_time > timer+1:
+            if not hard:
+                score -= 1*(multiplier/2)
+                overscore -= 1*(multiplier/2)
+            elif hard:
+                score -= 1*multiplier
+                overscore -= 1*multiplier
+            elif expert:
+                score -= 1*multiplier
+                overscore -= 1*multiplier
+                if not lost:
+                    lives -= 1
+            print(f"You took too long to enter your answer. Your score is now: {overscore}")
+
+        # Check if score is negative. If it is, set it to 0.
+        if score + abs(score) == 0:
+            score = 0
+        if overscore + abs(overscore) == 0:
+            overscore = 0
+
+        if lives == 0:
+            print(f"You're out of lives! Your score is: {score}")
+            quit()
 
         if ready == "stop":
             if free:
@@ -95,7 +127,6 @@ for i in range(len(q_and_a_dict)):
                 print(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
                       f"Your score with overrides is: {overscore}.")
             quit()
-
 
 if free:
     print(f"Oh! It looks like we're out of questions... somehow. But anyways, thanks for playing!.")

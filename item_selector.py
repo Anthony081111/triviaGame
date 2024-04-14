@@ -26,7 +26,7 @@ def select_item_from_list(selected_list, minimum=None, maximum=None):
             if okay == "y" or okay == "yes":
                 return selected_item
             elif okay == "n" or okay == "no":
-                # selected_list.remove()                      I don't know how this works feel free to fix.
+                selected_list.remove(selected_item)
                 print("Okay.")
                 break
             else:
@@ -38,6 +38,6 @@ if __name__ == "__main__":
     test_list1 = ["item0", "item1", "item2", "item3", "item4"]
     test_list2 = ["item0", "item1min", "item2", "item3max", "item4"]
     test_list3 = ["item0", "item1", "item2min&max", "item3", "item4"]
-    for i in range(2):
+    for i in range(10):
         print(select_item_from_list(test_list1), "\n success")
         print(f"Times went through loop:  {i+1}")

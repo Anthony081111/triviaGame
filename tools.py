@@ -7,6 +7,7 @@ def get_help():
     >Answers are not case sensitive.
     >Reporting: If a question is insulting or not appropriate, you can type "report" after the question or answer.
     >Score without overrides: This is your score, not counting the override codes.
+    >You can't get a negative score.
     >Modes:
     -->Normal: The normal way to play: Override codes, "I don't know" allowed.
     -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
