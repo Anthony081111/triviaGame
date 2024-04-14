@@ -62,6 +62,7 @@ def mode_responder(mode):
                     if confirmation == "y" or confirmation == "yes":
                         mode = input("Select your second mode: Normal, Hard, Expert").lower()
                         choice_loop = False
+                        timed_loop = False
                         extra_text = " and Timed"
                 else:
                     print("Please enter in a valid time limit.")
@@ -82,7 +83,7 @@ def mode_responder(mode):
     elif mode == "expert":
         choice_loop = True
         while choice_loop:
-            confirmation = input("Are you sure that you want Hard mode enabled? "
+            confirmation = input("Are you sure that you want Expert mode enabled? "
                                  "This will give you a 4x multiplier.").lower()
             if confirmation == "y" or confirmation == "yes":
                 choice_loop = False
@@ -94,3 +95,38 @@ def mode_responder(mode):
     else:
         print(f"Defaulting to Normal{extra_text} mode.")
         return False, "normal", timed, False, False, False, multiplier, how_much_time
+
+
+def get_average_list(selected_list):
+    items = len(selected_list)
+    total = 0
+    for i in range(items):
+        total += selected_list[i]
+    average = total/items
+    return average
+
+
+def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
+                  questions_time_out, longest, shortest, overscore, score):
+    if timed:
+        timed_text = f"Questions answered too late:                   {questions_time_out}\n"
+    else:
+        timed_text = ""
+
+    print(f"""Stats:
+    Questions survived:                             {questions_survived}
+    Questions answered correctly:                   {questions_correct}
+    Questions answered incorrectly:                 {questions_incorrect}
+    Questions answered with "I don't know":         {questions_idk}
+    {timed_text}
+    Longest question time:                          {longest}
+    Shortest question time:                         {shortest}
+    Average time per question:                      {average}
+
+    Score with overrides:                           {overscore}
+    Score without overrides:                        {score}
+    """)
+
+
+if __name__ == "__main__":
+    print("Wrong file doofus.")
