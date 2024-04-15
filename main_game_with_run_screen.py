@@ -27,10 +27,13 @@ questions_time_out = 0
 timer = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 time_list = []
 total_time = 0
+
 timed = False
 hard = False
 free = False
 expert = False
+
+total_points = 0
 multiplier = 1
 
 print("Welcome to your standard trivia game! You are allowed to say, \"I don't know\" and you will not lose points.")
@@ -64,8 +67,8 @@ for i in range(len(q_and_a_dict)):
         question_list.remove(question)
         start = time.time()
         guess = input(f"The question is: \n{question}\nYour answer:")
+        end = time.time()
         if guess == answer:
-            end = time.time()
             questions_correct += 1
             score += 1*multiplier
             overscore += 1*multiplier
@@ -77,10 +80,9 @@ for i in range(len(q_and_a_dict)):
             ready = input("Type anything when ready.").lower()
 
         elif guess.lower() == "i dont know" or guess.lower() == "i don't know" or guess.lower() == "idk":
-            end = time.time()
             print(f"That's alright! The correct answer was: {answer}")
             questions_idk += 1
-            if not expert:
+            if not expert and not free:
                 print(f"Your score is still: {overscore}")
             elif expert:
                 score -= 1*(multiplier/2)
@@ -90,21 +92,24 @@ for i in range(len(q_and_a_dict)):
             ready = input("Type anything when ready.").lower()
 
         else:
-            end = time.time()
             print(f"Sadly, that's incorrect. The correct answer was: {answer}")
             questions_incorrect += 1
-            if not free:
+            if not free and not hard:
                 score -= 1
                 overscore -= 1
             elif hard and not expert:
                 score -= 1*(multiplier/2)
-                overscore -= 1*(multiplier/2)
+                overscore = tools.check_negative(overscore)
             elif expert:
                 score -= 1*multiplier
                 overscore -= 1*multiplier
                 lives -= 1
                 lost = True
             choice_loop = False
+            score = tools.check_negative(score)
+            overscore = tools.check_negative(overscore)
+            lives = tools.check_negative(lives)
+            print(f"Your score is: {overscore}")
             ready = input("Type anything when ready.").lower()
             if ready == "whoops" and not hard:
                 overscore += 2
@@ -119,25 +124,20 @@ for i in range(len(q_and_a_dict)):
             elif hard:
                 score -= 1*multiplier
                 overscore -= 1*multiplier
-            elif expert:
-                score -= 1*multiplier
-                overscore -= 1*multiplier
-                if not lost:
+                if not lost and expert:
                     lives -= 1
             questions_time_out += 1
+            score = tools.check_negative(score)
+            overscore = tools.check_negative(overscore)
+            lives = tools.check_negative(lives)
             print(f"You took too long to enter your answer. Your score is now: {overscore}")
 
-        # Check if score is negative. If it is, set it to 0.
-        if score + abs(score) == 0:
-            score = 0
-        if overscore + abs(overscore) == 0:
-            overscore = 0
-
-        if lives == 0:
+        if lives <= 0:
             print(f"You're out of lives! Your score is: {score}")
             quit()
 
         questions_survived += 1
+        total_points += 1*multiplier
 
         if ready == "stop":
 
@@ -157,7 +157,8 @@ for i in range(len(q_and_a_dict)):
 
             if stat_maybe == "stats" or stat_maybe == "stat":
                 tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
-                                    questions_idk, questions_time_out, longest_time, shortest_time, overscore, score)
+                                    questions_idk, questions_time_out, longest_time, shortest_time, overscore, score,
+                                    total_points)
             else:
                 quit()
 
@@ -177,4 +178,4 @@ stat_maybe.lower()
 
 if stat_maybe == "stats" or stat_maybe == "stat":
     tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect, questions_idk,
-                        questions_time_out, longest_time, shortest_time, overscore, score)
+                        questions_time_out, longest_time, shortest_time, overscore, score, total_points)

@@ -18,6 +18,7 @@ def get_help():
 
 
 def get_dict():
+    """Return the dictionaries."""
     # Here is where you may enter in questions and answers.
     question_list = []       # Enter in your question here.
     q_and_a_dict = {}        # Enter in your question WITH the answer(as the definition) here.
@@ -25,6 +26,7 @@ def get_dict():
 
 
 def mode_responder(mode):
+    """Select a mode based on an input from the main program."""
     how_much_time = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     timed = False
     extra_text = ""
@@ -98,6 +100,7 @@ def mode_responder(mode):
 
 
 def get_average_list(selected_list):
+    """Get the average of a list."""
     items = len(selected_list)
     total = 0
     for i in range(items):
@@ -106,8 +109,25 @@ def get_average_list(selected_list):
     return average
 
 
+def get_percent(whole, part):
+    """Get the percent of two numbers. If the part is equal to 0, the percent will be 0."""
+    try:
+        int(whole)
+        int(part)
+    except KeyError:
+        print("Invalid inputs.")
+        return "N/A"
+    try:
+        percent = whole/part * 100
+    except ZeroDivisionError:
+        percent = 0
+    return percent
+
+
 def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
-                  questions_time_out, longest, shortest, overscore, score):
+                  questions_time_out, longest, shortest, overscore, score, highest):
+    """Display all of your stats."""
+
     if timed:
         timed_text = f"Questions answered too late:                   {questions_time_out}\n"
     else:
@@ -119,13 +139,25 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     Questions answered incorrectly:                 {questions_incorrect}
     Questions answered with "I don't know":         {questions_idk}
     {timed_text}
+    Correct question percentage:                    {get_percent(questions_survived, questions_correct)}%
+    Incorrect question percentage:                  {get_percent(questions_survived, questions_incorrect)}%
+    Unknown question percentage:                    {get_percent(questions_survived, questions_idk)}%
+
     Longest question time:                          {longest}
     Shortest question time:                         {shortest}
     Average time per question:                      {average}
 
     Score with overrides:                           {overscore}
     Score without overrides:                        {score}
+    Highest possible score:                         {highest}
     """)
+
+
+def check_negative(number):
+    """Check if a number is negative. If it is, set it to 0."""
+    if number + abs(number) == 0:
+        number = 0
+    return number
 
 
 if __name__ == "__main__":
