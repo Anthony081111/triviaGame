@@ -1,3 +1,6 @@
+import random
+
+
 def get_help():
     help_screen = """
     >Resetting: Want a different mode? Well, just type "reset" on the help screen prompt and it will stop.
@@ -124,12 +127,19 @@ def get_percent(whole, part):
     return percent
 
 
+def round_to_decimal(number, power_of_ten):
+    number *= 10 ^ power_of_ten
+    number = round(number)
+    number /= 10 ^ power_of_ten
+    return number
+
+
 def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
-                  questions_time_out, longest, shortest, overscore, score, highest):
+                  questions_override, questions_time_out, longest, shortest, overscore, score, highest):
     """Display all of your stats."""
 
     if timed:
-        timed_text = f"Questions answered too late:                   {questions_time_out}\n"
+        timed_text = f"Questions answered too late:                    {questions_time_out}\n"
     else:
         timed_text = ""
 
@@ -138,19 +148,70 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     Questions answered correctly:                   {questions_correct}
     Questions answered incorrectly:                 {questions_incorrect}
     Questions answered with "I don't know":         {questions_idk}
+    Questions with an override code used:           {questions_override}
     {timed_text}
     Correct question percentage:                    {get_percent(questions_survived, questions_correct)}%
     Incorrect question percentage:                  {get_percent(questions_survived, questions_incorrect)}%
     Unknown question percentage:                    {get_percent(questions_survived, questions_idk)}%
 
-    Longest question time:                          {longest}
-    Shortest question time:                         {shortest}
-    Average time per question:                      {average}
+    Longest question time:                          {round_to_decimal(longest, 2)}
+    Shortest question time:                         {round_to_decimal(shortest, 2)}
+    Average time per question:                      {round_to_decimal(average, 2)}
 
     Score with overrides:                           {overscore}
     Score without overrides:                        {score}
     Highest possible score:                         {highest}
     """)
+    if random.randint(1, 100) == 81:
+        print("081111")
+    if random.randint(1, 100) == 57:
+        print("ajh")
+
+
+def display_bonuses(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
+                    questions_time_out, questions_override, longest, shortest, overscore, score, highest, multiplier,
+                    master, code, all):
+    display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
+                  questions_override, questions_time_out, longest, shortest, overscore, score, highest)
+
+    if questions_survived == questions_correct:
+        print(f"Complete success                                +{10*multiplier}")
+    if get_percent(questions_survived, questions_correct) >= 90:
+        print(f"A-range                                         +{5*multiplier}")
+    if get_percent(questions_survived, questions_correct) <= 59:
+        print(f"F-range                                         +{multiplier}")
+    if get_percent(questions_survived, questions_correct) == 50:
+        print(f"Half and half                                   +{2*multiplier}")
+    if questions_survived == questions_incorrect:
+        print(f"Complete failure                                +1")
+    if master:
+        print(f"Master difficulty                               +{25*multiplier}")
+    if get_percent(questions_survived, questions_override) >= 50:
+        print(f"Cheater                                         +1")
+    if questions_survived == questions_override:
+        print(f"Complete cheater                                +5")
+    if code:
+        print(f"Secret code                                     +1")
+    if get_percent(questions_survived, questions_idk) >= 50:
+        print(f"No clue                                         +3")
+    if questions_survived == questions_idk:
+        print(f"Completely clueless                             +5")
+    if shortest < 1:
+        print(f"Lightening speed                                +{10*multiplier}")
+    if longest >= 180:
+        print(f"Slow                                            +{multiplier}")
+    if shortest >= 180:
+        print(f"That's the fastest you can go?                  +{2*multiplier}")
+    if longest == 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999:
+        print(f"You waited HOW LONG?!?!                         +{100*multiplier}")
+    if all:
+        print(f"All questions answered                          +{questions_survived*multiplier}")
+
+    """
+    Bonuses:
+    I really want to give you a negative score      +{-2*multiplier}
+    Funny numbered score                            +{score}
+    """
 
 
 def check_negative(number):

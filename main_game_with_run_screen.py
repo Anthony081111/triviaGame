@@ -23,6 +23,7 @@ questions_incorrect = 0
 questions_correct = 0
 questions_idk = 0
 questions_time_out = 0
+questions_override = 0
 
 timer = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 time_list = []
@@ -32,6 +33,8 @@ timed = False
 hard = False
 free = False
 expert = False
+bonus = False
+all_answered = False
 
 total_points = 0
 multiplier = 1
@@ -51,6 +54,12 @@ if help_maybe == "help":
     print(tools.get_help())
 elif help_maybe == "reset":
     quit()
+elif help_maybe == "bonus":
+    confirmation = input(f"Bonuses will mean your multiplier will be: {multiplier*0.5}. "
+                         f"Do you want them enabled?").lower()
+    if confirmation == "y" or confirmation == "yes":
+        multiplier *= 0.5
+        bonus = True
 
 for i in range(len(q_and_a_dict)):
     lost = False
@@ -112,6 +121,7 @@ for i in range(len(q_and_a_dict)):
             print(f"Your score is: {overscore}")
             ready = input("Type anything when ready.").lower()
             if ready == "whoops" and not hard:
+                questions_override += 1
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
                 ready = input("Type anything when ready.").lower()
@@ -157,14 +167,14 @@ for i in range(len(q_and_a_dict)):
 
             if stat_maybe == "stats" or stat_maybe == "stat":
                 tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
-                                    questions_idk, questions_time_out, longest_time, shortest_time, overscore, score,
-                                    total_points)
-            else:
-                quit()
+                                    questions_idk, questions_override, questions_time_out, longest_time, shortest_time,
+                                    overscore, score, total_points)
+            quit()
 
 shortest_time = min(time_list)
 longest_time = max(time_list)
 average_time = tools.get_average_list(time_list)
+all_answered = True
 
 if free:
     stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. Type anything to quit.")
@@ -178,4 +188,5 @@ stat_maybe.lower()
 
 if stat_maybe == "stats" or stat_maybe == "stat":
     tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect, questions_idk,
-                        questions_time_out, longest_time, shortest_time, overscore, score, total_points)
+                        questions_override, questions_time_out, longest_time, shortest_time, overscore, score,
+                        total_points)
