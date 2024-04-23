@@ -1,4 +1,4 @@
-import item_selector as select
+import math_tools as mtools
 import tools
 
 import time
@@ -35,6 +35,8 @@ free = False
 expert = False
 bonus = False
 all_answered = False
+master = False
+code = False
 
 total_points = 0
 multiplier = 1
@@ -44,7 +46,7 @@ print("If the answer you said is close enough, you are allowed to type, \"whoops
       "correct.")
 print("To stop, type: \"stop\"")
 while mode_loop:
-    mode = input("Select your mode: Normal, Timed, Hard, Free, Expert").lower()
+    mode = input("Select your mode: Free, Normal, Hard, Expert, Timed").lower()
     mode_loop, mode, timed, hard, free, expert, multiplier, timer = tools.mode_responder(mode)
 
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
@@ -63,7 +65,7 @@ elif help_maybe == "bonus":
 
 for i in range(len(q_and_a_dict)):
     lost = False
-    question = select.random_item_from_list(question_list)
+    question = mtools.random_item_from_list(question_list)
     try:
         answer = q_and_a_dict[question]
     except KeyError:
@@ -153,7 +155,7 @@ for i in range(len(q_and_a_dict)):
 
             shortest_time = min(time_list)
             longest_time = max(time_list)
-            average_time = tools.get_average_list(time_list)
+            average_time = mtools.get_average_list(time_list)
 
             if free:
                 stat_maybe = input("Okay! Thanks for playing! Type anything to quit.")
@@ -169,11 +171,16 @@ for i in range(len(q_and_a_dict)):
                 tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
                                     questions_idk, questions_override, questions_time_out, longest_time, shortest_time,
                                     overscore, score, total_points)
+                if bonus:
+                    tools.display_bonuses(timed, average_time, questions_survived, questions_correct,
+                                          questions_incorrect, questions_idk, questions_time_out, questions_override,
+                                          longest_time, shortest_time, overscore, score, total_points, multiplier,
+                                          master, code, all_answered)
             quit()
 
 shortest_time = min(time_list)
 longest_time = max(time_list)
-average_time = tools.get_average_list(time_list)
+average_time = mtools.get_average_list(time_list)
 all_answered = True
 
 if free:
@@ -190,3 +197,7 @@ if stat_maybe == "stats" or stat_maybe == "stat":
     tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect, questions_idk,
                         questions_override, questions_time_out, longest_time, shortest_time, overscore, score,
                         total_points)
+    if bonus:
+        tools.display_bonuses(timed, average_time, questions_survived, questions_correct, questions_incorrect,
+                              questions_idk, questions_time_out, questions_override, longest_time, shortest_time,
+                              overscore, score, total_points, multiplier, master, code, all_answered)

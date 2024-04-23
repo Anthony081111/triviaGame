@@ -1,4 +1,4 @@
-import random
+import math_tools as mtools
 
 
 def get_help():
@@ -102,38 +102,6 @@ def mode_responder(mode):
         return False, "normal", timed, False, False, False, multiplier, how_much_time
 
 
-def get_average_list(selected_list):
-    """Get the average of a list."""
-    items = len(selected_list)
-    total = 0
-    for i in range(items):
-        total += selected_list[i]
-    average = total/items
-    return average
-
-
-def get_percent(whole, part):
-    """Get the percent of two numbers. If the part is equal to 0, the percent will be 0."""
-    try:
-        int(whole)
-        int(part)
-    except KeyError:
-        print("Invalid inputs.")
-        return "N/A"
-    try:
-        percent = whole/part * 100
-    except ZeroDivisionError:
-        percent = 0
-    return percent
-
-
-def round_to_decimal(number, power_of_ten):
-    number *= 10 ^ power_of_ten
-    number = round(number)
-    number /= 10 ^ power_of_ten
-    return number
-
-
 def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
                   questions_override, questions_time_out, longest, shortest, overscore, score, highest):
     """Display all of your stats."""
@@ -150,62 +118,72 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     Questions answered with "I don't know":         {questions_idk}
     Questions with an override code used:           {questions_override}
     {timed_text}
-    Correct question percentage:                    {get_percent(questions_survived, questions_correct)}%
-    Incorrect question percentage:                  {get_percent(questions_survived, questions_incorrect)}%
-    Unknown question percentage:                    {get_percent(questions_survived, questions_idk)}%
+    Correct question percentage:                    {mtools.get_percent(questions_survived, questions_correct)}%
+    Incorrect question percentage:                  {mtools.get_percent(questions_survived, questions_incorrect)}%
+    Unknown question percentage:                    {mtools.get_percent(questions_survived, questions_idk)}%
 
-    Longest question time:                          {round_to_decimal(longest, 2)}
-    Shortest question time:                         {round_to_decimal(shortest, 2)}
-    Average time per question:                      {round_to_decimal(average, 2)}
+    Longest question time:                          {mtools.round_to_decimal(longest, 2)}
+    Shortest question time:                         {mtools.round_to_decimal(shortest, 2)}
+    Average time per question:                      {mtools.round_to_decimal(average, 2)}
 
     Score with overrides:                           {overscore}
     Score without overrides:                        {score}
     Highest possible score:                         {highest}
     """)
-    if random.randint(1, 100) == 81:
-        print("081111")
-    if random.randint(1, 100) == 57:
-        print("ajh")
 
 
 def display_bonuses(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
                     questions_time_out, questions_override, longest, shortest, overscore, score, highest, multiplier,
-                    master, code, all):
-    display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
-                  questions_override, questions_time_out, longest, shortest, overscore, score, highest)
+                    master, code, all_answered):
+    bonus_score = score
 
     if questions_survived == questions_correct:
         print(f"Complete success                                +{10*multiplier}")
-    if get_percent(questions_survived, questions_correct) >= 90:
+        bonus_score += 10*multiplier
+    if mtools.get_percent(questions_survived, questions_correct) >= 90:
         print(f"A-range                                         +{5*multiplier}")
-    if get_percent(questions_survived, questions_correct) <= 59:
+        bonus_score += 5*multiplier
+    if mtools.get_percent(questions_survived, questions_correct) <= 59:
         print(f"F-range                                         +{multiplier}")
-    if get_percent(questions_survived, questions_correct) == 50:
+        bonus_score += multiplier
+    if mtools.get_percent(questions_survived, questions_correct) == 50:
         print(f"Half and half                                   +{2*multiplier}")
+        bonus_score += 2*multiplier
     if questions_survived == questions_incorrect:
         print(f"Complete failure                                +1")
+        bonus_score += 1
     if master:
         print(f"Master difficulty                               +{25*multiplier}")
-    if get_percent(questions_survived, questions_override) >= 50:
+        bonus_score += 25*multiplier
+    if mtools.get_percent(questions_survived, questions_override) >= 50:
         print(f"Cheater                                         +1")
+        bonus_score += 1
     if questions_survived == questions_override:
         print(f"Complete cheater                                +5")
+        bonus_score += 5
     if code:
         print(f"Secret code                                     +1")
-    if get_percent(questions_survived, questions_idk) >= 50:
+        bonus_score += 1
+    if mtools.get_percent(questions_survived, questions_idk) >= 50:
         print(f"No clue                                         +3")
+        bonus_score += 3
     if questions_survived == questions_idk:
         print(f"Completely clueless                             +5")
+        bonus_score += 5
     if shortest < 1:
         print(f"Lightening speed                                +{10*multiplier}")
+        bonus_score += 10*multiplier
     if longest >= 180:
         print(f"Slow                                            +{multiplier}")
+        bonus_score += multiplier
     if shortest >= 180:
         print(f"That's the fastest you can go?                  +{2*multiplier}")
-    if longest == 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999:
-        print(f"You waited HOW LONG?!?!                         +{100*multiplier}")
-    if all:
+        bonus_score += 2*multiplier
+    if all_answered:
         print(f"All questions answered                          +{questions_survived*multiplier}")
+        bonus_score += questions_survived*multiplier
+
+        print(f"Score with bonuses:                             {bonus_score}")
 
     """
     Bonuses:
