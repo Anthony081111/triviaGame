@@ -33,6 +33,13 @@ def select_item_from_list(selected_list, minimum=None, maximum=None):
                 print("Please answer with yes or no.")
 
 
+def check_negative(number):
+    """Check if a number is negative. If it is, set it to 0."""
+    if number + abs(number) == 0:
+        number = 0
+    return number
+
+
 def get_total_list(selected_list):
     """Get the total of a list."""
     total = 0

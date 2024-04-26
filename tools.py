@@ -15,7 +15,7 @@ def get_help():
     -->Normal: The normal way to play: Override codes, "I don't know" allowed.
     -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
     -->Hard: No overrides and "I don't know" allowed.
-    -->Expert: You have 3 lives. No overrides and a light punishment for "I don't know".
+    -->Expert: You have 3 health. No overrides and a light punishment for "I don't know".
     -->Free: No points, just basic fun."""
     return help_screen
 
@@ -36,52 +36,60 @@ def mode_responder(mode):
     time_dict = {5: 3, 10: 2.5, 15: 2, 30: 1.75, 45: 1.5, 60: 1.25}
     multiplier = 1
     choice_loop = True
+    stopped = False
 
     if mode == "free":
         while choice_loop:
-            confirmation = input("Are you sure you would like Free mode? "
-                                 "This will permanently set your multiplier to 0.").lower()
+            confirmation = input("Are you sure you would like Free mode?").lower()
             if confirmation == "y" or confirmation == "yes":
-                return False, "free", False, False, True, False, 0, how_much_time
+                return "free", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
                 choice_loop = False
 
     elif mode == "timed":
-        timed_loop = True
         timed = True
+        timed_loop = True
+        choice_loop = True
+        while choice_loop:
+            confirmation = input("Are you sure you want Timed mode?").lower()
+            if confirmation == "n" and confirmation == "no":
+                timed = False
+                timed_loop = False
+            elif confirmation == "y" or confirmation == "yes":
+                choice_loop = False
+        choice_loop1 = True
         while timed_loop:
-            choice_loop = True
-            while choice_loop:
+            while choice_loop1:
                 try:
                     how_much_time = int(input("How much time per question: 5, 10, 15, 30, 45, 60"))
-                    choice_loop = False
+                    choice_loop1 = False
                 except ValueError:
                     print("Please enter in a valid time limit.")
-            choice_loop = True
-            while choice_loop:
+            choice_loop2 = True
+            while choice_loop2:
                 if how_much_time == 5 or how_much_time == 10 or how_much_time == 15 or how_much_time == 30 or \
                         how_much_time == 45 or how_much_time == 60:
-                    multiplier *= time_dict[how_much_time]
                     confirmation = input(f"Are you sure you would like {how_much_time} seconds? This will give you a "
                                          f"{multiplier}x multiplier.").lower()
+                    multiplier *= time_dict[how_much_time]
                     if confirmation == "y" or confirmation == "yes":
                         mode = input("Select your second mode: Normal, Hard, Expert").lower()
-                        choice_loop = False
+                        choice_loop2 = False
                         timed_loop = False
                         extra_text = " and Timed"
                 else:
                     print("Please enter in a valid time limit.")
-                    choice_loop = False
+                    choice_loop2 = False
 
     if mode == "hard":
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Hard mode enabled? "
-                                 "This will give you a 2x multiplier.").lower()
+                                 f"This will give you a {multiplier * 2} multiplier.").lower()
             if confirmation == "y" or confirmation == "yes":
                 choice_loop = False
                 multiplier *= 2
-                return False, "hard", timed, True, False, False, multiplier, how_much_time
+                return "hard", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
                 choice_loop = False
 
@@ -89,17 +97,29 @@ def mode_responder(mode):
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Expert mode enabled? "
-                                 "This will give you a 4x multiplier.").lower()
+                                 f"This will give you a {multiplier * 4} multiplier.").lower()
             if confirmation == "y" or confirmation == "yes":
                 choice_loop = False
                 multiplier *= 4
-                return False, "expert", timed, True, False, True, multiplier, how_much_time
+                return "expert", timed, how_much_time, False, multiplier
+            elif confirmation == "n" or confirmation == "no":
+                choice_loop = False
+
+    elif mode == "expert+":
+        choice_loop = True
+        while choice_loop:
+            confirmation = input("Are you sure that you want Expert mode enabled? "
+                                 f"This will give you a {multiplier * 8} multiplier.")
+            if confirmation == "y" or confirmation == "yes":
+                choice_loop = False
+                multiplier *= 8
+                return "expert+", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
                 choice_loop = False
 
     else:
         print(f"Defaulting to Normal{extra_text} mode.")
-        return False, "normal", timed, False, False, False, multiplier, how_much_time
+        return "normal", timed, how_much_time, False, multiplier
 
 
 def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
@@ -192,11 +212,21 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     """
 
 
-def check_negative(number):
-    """Check if a number is negative. If it is, set it to 0."""
-    if number + abs(number) == 0:
-        number = 0
-    return number
+def seed_responder(seed, multiplier):
+    max_points = (int(str(seed)[-2]) * 10) + (int(str(seed)[-1]))
+    min_points = (int(str(seed)[-4]) * 10) + (int(str(seed)[-3]))
+    if max_points <= min_points:
+        max_points = min_points + 0.1
+    if max_points < 1:
+        max_points += 1
+    if min_points < 1:
+        min_points += 1
+    if max_points <= min_points:
+        max_points = min_points + 0.1
+    redemption_max = int(str(seed)[-5])
+    redemption_min = int(str(seed)[-6])
+    if redemption_max <= redemption_min:
+        redemption_max = min_points + 0.1
 
 
 if __name__ == "__main__":

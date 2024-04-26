@@ -1,3 +1,5 @@
+import random
+
 import math_tools as mtools
 import tools
 
@@ -14,9 +16,8 @@ overscore = 0
 set_number_i = 2      # Testing
 
 choice_loop = True
-mode_loop = True
 
-lives = 3
+health = 100
 
 questions_survived = 0
 questions_incorrect = 0
@@ -25,32 +26,30 @@ questions_idk = 0
 questions_time_out = 0
 questions_override = 0
 
-timer = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 time_list = []
 total_time = 0
+default_timer = 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 
-timed = False
-hard = False
-free = False
-expert = False
 bonus = False
 all_answered = False
 master = False
 code = False
 
 total_points = 0
-multiplier = 1
 
 print("Welcome to your standard trivia game! You are allowed to say, \"I don't know\" and you will not lose points.")
 print("If the answer you said is close enough, you are allowed to type, \"whoops\" and it will mark the question as "
       "correct.")
 print("To stop, type: \"stop\"")
-while mode_loop:
-    mode = input("Select your mode: Free, Normal, Hard, Expert, Timed").lower()
-    mode_loop, mode, timed, hard, free, expert, multiplier, timer = tools.mode_responder(mode)
+mode = input("Select your mode: Free, Normal, Hard, Expert, Expert+, Chance, Timed").lower()
+mode, timed, timer, mode_loop, multiplier = tools.mode_responder(mode)
 
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
                    "game will begin").lower()
+
+seed = random.randint(1, 999999999)
+
+
 
 if help_maybe == "help":
     print(tools.get_help())
@@ -83,9 +82,9 @@ for i in range(len(q_and_a_dict)):
             questions_correct += 1
             score += 1*multiplier
             overscore += 1*multiplier
-            if free:
+            if mode == "free":
                 print("Correct!")
-            elif not free:
+            else:
                 print(f"Correct! Your score now is: {overscore}")
             choice_loop = False
             ready = input("Type anything when ready.").lower()
@@ -93,36 +92,44 @@ for i in range(len(q_and_a_dict)):
         elif guess.lower() == "i dont know" or guess.lower() == "i don't know" or guess.lower() == "idk":
             print(f"That's alright! The correct answer was: {answer}")
             questions_idk += 1
-            if not expert and not free:
+            if mode != "expert" and mode != "free" and mode != "expert+":
                 print(f"Your score is still: {overscore}")
-            elif expert:
+            elif mode == "expert":
                 score -= 1*(multiplier/2)
                 overscore -= 1*(multiplier/2)
-                print(f"Your score is now: {score}")
+                print(f"Your score is now: {overscore}")
+            elif mode == "expert+":
+                score -= 1*multiplier
+                overscore -= 1*multiplier
+                print(f"Your score is now: {overscore}")
             choice_loop = False
             ready = input("Type anything when ready.").lower()
 
         else:
             print(f"Sadly, that's incorrect. The correct answer was: {answer}")
             questions_incorrect += 1
-            if not free and not hard:
+            if mode != "free" and mode != "hard" and mode != "expert" and mode != "expert+":
                 score -= 1
                 overscore -= 1
-            elif hard and not expert:
+            elif mode == "hard":
                 score -= 1*(multiplier/2)
-                overscore = tools.check_negative(overscore)
-            elif expert:
+                overscore -= 1*(multiplier/2)
+            elif mode == "expert":
                 score -= 1*multiplier
                 overscore -= 1*multiplier
-                lives -= 1
+                health -= 20
                 lost = True
+            elif mode == "expert+":
+                score -= 1*multiplier
+                overscore -= 1*multiplier
+                health -= 33.33
             choice_loop = False
-            score = tools.check_negative(score)
-            overscore = tools.check_negative(overscore)
-            lives = tools.check_negative(lives)
+            score = mtools.check_negative(score)
+            overscore = mtools.check_negative(overscore)
+            health = mtools.check_negative(health)
             print(f"Your score is: {overscore}")
             ready = input("Type anything when ready.").lower()
-            if ready == "whoops" and not hard:
+            if ready == "whoops" and mode != "hard" and mode != "expert":
                 questions_override += 1
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
@@ -130,22 +137,40 @@ for i in range(len(q_and_a_dict)):
         elapsed_time = end - start
         time_list.append(elapsed_time)
         if timed and elapsed_time > timer+1:
-            if not hard:
+            if mode != "hard" and mode != "expert":
                 score -= 1*(multiplier/2)
                 overscore -= 1*(multiplier/2)
-            elif hard:
+            elif mode == "hard" or mode == "expert":
                 score -= 1*multiplier
                 overscore -= 1*multiplier
-                if not lost and expert:
-                    lives -= 1
+                if not lost and mode == "expert":
+                    health -= 3
+                elif not lost and mode == "expert+":
+                    health -= 5
+
             questions_time_out += 1
-            score = tools.check_negative(score)
-            overscore = tools.check_negative(overscore)
-            lives = tools.check_negative(lives)
+            score = mtools.check_negative(score)
+            overscore = mtools.check_negative(overscore)
+            health = mtools.check_negative(health)
             print(f"You took too long to enter your answer. Your score is now: {overscore}")
 
-        if lives <= 0:
-            print(f"You're out of lives! Your score is: {score}")
+        if health < 1:
+            shortest_time = min(time_list)
+            longest_time = max(time_list)
+            average_time = mtools.get_average_list(time_list)
+            stat_maybe = input(f"You're out of lives! Type anything to quit.")
+
+            stat_maybe.lower()
+
+            if stat_maybe == "stats" or stat_maybe == "stat":
+                tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
+                                    questions_idk, questions_override, questions_time_out, longest_time, shortest_time,
+                                    overscore, score, total_points)
+                if bonus:
+                    tools.display_bonuses(timed, average_time, questions_survived, questions_correct,
+                                          questions_incorrect, questions_idk, questions_time_out, questions_override,
+                                          longest_time, shortest_time, overscore, score, total_points, multiplier,
+                                          master, code, all_answered)
             quit()
 
         questions_survived += 1
@@ -157,9 +182,9 @@ for i in range(len(q_and_a_dict)):
             longest_time = max(time_list)
             average_time = mtools.get_average_list(time_list)
 
-            if free:
+            if mode == "free":
                 stat_maybe = input("Okay! Thanks for playing! Type anything to quit.")
-            elif hard:
+            elif mode == "hard" or mode == "expert":
                 stat_maybe = input(f"Okay! Thanks for playing! Your score is: {score}. Type anything to quit.")
             else:
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
@@ -183,9 +208,9 @@ longest_time = max(time_list)
 average_time = mtools.get_average_list(time_list)
 all_answered = True
 
-if free:
+if mode == "free":
     stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. Type anything to quit.")
-elif hard:
+elif mode == "hard" or mode == "expert":
     stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. But anyways, your score is: {score}. "
                        f"Type anything to quit.")
 else:
