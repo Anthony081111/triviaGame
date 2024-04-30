@@ -40,6 +40,14 @@ def check_negative(number):
     return number
 
 
+def check_negative_true_false(number):
+    modified = check_negative(number)
+    if modified != number:
+        return True
+    else:
+        return False
+
+
 def get_total_list(selected_list):
     """Get the total of a list."""
     total = 0
@@ -98,3 +106,11 @@ def get_percent_change(whole, part):
         print("Whole is zero, cannot divide by zero(Warning Code 312)")
         percent = 0
     return percent
+
+
+def what_tens_place(number):
+    tens_place = 1
+    while number >= 10:
+        number /= 10
+        tens_place += 1
+    return tens_place

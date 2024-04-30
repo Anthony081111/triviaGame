@@ -1,3 +1,5 @@
+import random
+
 import math_tools as mtools
 
 
@@ -212,21 +214,19 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     """
 
 
-def seed_responder(seed, multiplier):
-    max_points = (int(str(seed)[-2]) * 10) + (int(str(seed)[-1]))
-    min_points = (int(str(seed)[-4]) * 10) + (int(str(seed)[-3]))
-    if max_points <= min_points:
-        max_points = min_points + 0.1
-    if max_points < 1:
-        max_points += 1
-    if min_points < 1:
-        min_points += 1
-    if max_points <= min_points:
-        max_points = min_points + 0.1
-    redemption_max = int(str(seed)[-5])
-    redemption_min = int(str(seed)[-6])
-    if redemption_max <= redemption_min:
-        redemption_max = min_points + 0.1
+def chance_points(seed, multiplier, card_used=None):
+    points_list = [int(str(seed)[-1]) / 10, int(str(seed)[-3]) * 10 + int(str(seed)[-2])]
+    max_max_points = max(points_list)
+    max_min_points = min(points_list)
+    points_list.clear()
+    points_list = [int(str(seed)[-4]) / 10, int(str(seed)[-6]) * 10 + int(str(seed)[-5])]
+    min_max_points = max(points_list)
+    min_min_points = min(points_list)
+
+    max_points = random.randint(max_min_points, max_max_points)
+    min_points = random.randint(min_min_points, min_max_points)
+    max_points *= multiplier
+    min_points *= multiplier
 
 
 if __name__ == "__main__":
