@@ -50,7 +50,6 @@ help_maybe = input("If you would like to learn more, type: \"help\" and you'll b
 seed = random.randint(1, 999999999)
 
 
-
 if help_maybe == "help":
     print(tools.get_help())
 elif help_maybe == "reset":

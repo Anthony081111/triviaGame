@@ -214,20 +214,5 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     """
 
 
-def chance_points(seed, multiplier, card_used=None):
-    points_list = [int(str(seed)[-1]) / 10, int(str(seed)[-3]) * 10 + int(str(seed)[-2])]
-    max_max_points = max(points_list)
-    max_min_points = min(points_list)
-    points_list.clear()
-    points_list = [int(str(seed)[-4]) / 10, int(str(seed)[-6]) * 10 + int(str(seed)[-5])]
-    min_max_points = max(points_list)
-    min_min_points = min(points_list)
-
-    max_points = random.randint(max_min_points, max_max_points)
-    min_points = random.randint(min_min_points, min_max_points)
-    max_points *= multiplier
-    min_points *= multiplier
-
-
 if __name__ == "__main__":
     print("Wrong file doofus.")

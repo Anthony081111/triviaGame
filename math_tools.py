@@ -55,8 +55,7 @@ def get_total_list(selected_list):
         try:
             total += i
         except TypeError:
-            print("Invalid item in list(Error Code 311)")
-            quit(311)
+            quit(58)
     return total
 
 
@@ -66,8 +65,7 @@ def get_average_list(selected_list):
     try:
         average = total / len(selected_list)
     except ZeroDivisionError:
-        print("Empty list, cannot calculate average(Error Code 321)")
-        quit(321)
+        quit(69)
     return average
 
 
@@ -77,12 +75,10 @@ def get_percent(whole, part):
         int(whole)
         int(part)
     except KeyError:
-        print("Invalid inputs(Error Code 312)")
-        quit(312)
+        quit(79)
     try:
         percent = whole/part * 100
     except ZeroDivisionError:
-        print("Part is zero, cannot divide by zero(Warning Code 311)")
         percent = 0
     return percent
 
@@ -103,7 +99,6 @@ def get_percent_change(whole, part):
     try:
         percent = (difference / whole) * 100
     except ZeroDivisionError:
-        print("Whole is zero, cannot divide by zero(Warning Code 312)")
         percent = 0
     return percent
 
