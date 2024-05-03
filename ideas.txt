@@ -1,0 +1,18 @@
+Cards:
+>Influence the way the game is played
+>Card types:
+->Safety:                   No points added or removed
+->Half:                     Halve points added, halve points removed
+->Double:                   Double points added, double points removed
+->Triple:                   triple points added, triple points removed
+->+1 Multiplier:            Add 1 to your multiplier
+->+2 Multiplier:            Add 2 to your multiplier
+->x1.5 Multiplier:          Multiply your multiplier by 1.5
+->+2 Temp Multiplier:       Add 2 to your multiplier for this question only
+->+4 Temp Multiplier:       Add 4 to your multiplier for this question only
+->x3 Temp Multiplier:       Multiply your multiplier by 3 for this question only
+->+25 Score:                Add 25 to your score
+->x2 Score:                 Double your score
+->Free IDK:                 For this question only, "I don't know" will cost you no points
+->Mode Swap:                Change your mode
+->Temp Mode Swap:           Change your mode for this question only

@@ -33,6 +33,16 @@ def select_item_from_list(selected_list, minimum=None, maximum=None):
                 print("Please answer with yes or no.")
 
 
+def shuffle_list(selected_list):
+    new_list = []
+    index = len(selected_list)
+    for i in range(index):
+        item = selected_list[random.randint(0, len(selected_list) - 1)]
+        selected_list.remove(item)
+        new_list.append(item)
+    return new_list
+
+
 def check_negative(number):
     """Check if a number is negative. If it is, set it to 0."""
     if number + abs(number) == 0:
