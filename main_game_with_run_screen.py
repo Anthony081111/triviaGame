@@ -17,7 +17,7 @@ set_number_i = 2      # Testing
 
 choice_loop = True
 
-health = 100
+health = 15
 
 questions_survived = 0
 questions_incorrect = 0
@@ -116,12 +116,12 @@ for i in range(len(q_and_a_dict)):
             elif mode == "expert":
                 score -= 1*multiplier
                 overscore -= 1*multiplier
-                health -= 20
+                health -= 3
                 lost = True
             elif mode == "expert+":
                 score -= 1*multiplier
                 overscore -= 1*multiplier
-                health -= 33.33
+                health -= 5
             choice_loop = False
             score = mtools.check_negative(score)
             overscore = mtools.check_negative(overscore)
@@ -136,10 +136,10 @@ for i in range(len(q_and_a_dict)):
         elapsed_time = end - start
         time_list.append(elapsed_time)
         if timed and elapsed_time > timer+1:
-            if mode != "hard" and mode != "expert":
+            if mode != "hard" and mode != "expert" and mode != "expert+":
                 score -= 1*(multiplier/2)
                 overscore -= 1*(multiplier/2)
-            elif mode == "hard" or mode == "expert":
+            elif mode == "hard" or mode == "expert" or mode == "expert+":
                 score -= 1*multiplier
                 overscore -= 1*multiplier
                 if not lost and mode == "expert":
@@ -183,7 +183,7 @@ for i in range(len(q_and_a_dict)):
 
             if mode == "free":
                 stat_maybe = input("Okay! Thanks for playing! Type anything to quit.")
-            elif mode == "hard" or mode == "expert":
+            elif mode == "hard" or mode == "expert" or mode == "expert+":
                 stat_maybe = input(f"Okay! Thanks for playing! Your score is: {score}. Type anything to quit.")
             else:
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "

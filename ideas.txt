@@ -14,5 +14,5 @@ Cards:
 ->+25 Score:                Add 25 to your score
 ->x2 Score:                 Double your score
 ->Free IDK:                 For this question only, "I don't know" will cost you no points
-->Mode Swap:                Change your mode
+->Mode Swap:                Change your mode(can't change Timed, Chance, or Bonus. Also, you can't switch to free)
 ->Temp Mode Swap:           Change your mode for this question only

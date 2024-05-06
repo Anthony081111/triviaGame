@@ -119,3 +119,18 @@ def what_tens_place(number):
         number /= 10
         tens_place += 1
     return tens_place
+
+
+def coin_flip():
+    coin = random.randint(1, 2)
+    if coin == 1:
+        return False
+    elif coin == 2:
+        return True
+
+
+def dice_roll(sides):
+    if sides <= 2:
+        print("Too few sides!")
+        quit()
+    return random.randint(1, sides)
