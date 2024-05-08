@@ -1,33 +1,23 @@
-import random
-
 import math_tools as mtools
 
 
 def get_help():
     help_screen = """
-    >Resetting: Want a different mode? Well, just type "reset" on the help screen prompt and it will stop.
-    >Override codes: "whoops" will mark an incorrect question as correct when it asks you if you're ready, 
-    but only in certain modes. 
-    >Yes or no shortcuts: "y" and "n" can be used to answer as "yes" or "no". 
-    >Answers are not case sensitive.
-    >Reporting: If a question is insulting or not appropriate, you can type "report" after the question or answer.
-    >Score without overrides: This is your score, not counting the override codes.
-    >You can't get a negative score.
-    >Modes:
-    -->Normal: The normal way to play: Override codes, "I don't know" allowed.
-    -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
-    -->Hard: No overrides and "I don't know" allowed.
-    -->Expert: You have 3 health. No overrides and a light punishment for "I don't know".
-    -->Free: No points, just basic fun."""
+>Resetting: Want a different mode or mistyped one? Well, just type "reset" on the help screen prompt 
+and it will stop.
+>Override codes: "whoops" will mark an incorrect question as correct when it asks you if you're ready, 
+but only in normal or free mode. 
+>Yes or no shortcuts: "y" and "n" can be used to answer as "yes" or "no". 
+>Answers are not case sensitive.
+>Score without overrides: This is your score, not counting the override codes.
+>You can't get a negative score.
+>Modes:
+-->Normal: The normal way to play: Override codes, "I don't know" allowed.
+-->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
+-->Hard: No overrides and "I don't know" allowed.
+-->Expert: You have 3 health. No overrides and a light punishment for "I don't know".
+-->Free: No points, just basic fun."""
     return help_screen
-
-
-def get_dict():
-    """Return the dictionaries."""
-    # Here is where you may enter in questions and answers.
-    question_list = []       # Enter in your question here.
-    q_and_a_dict = {}        # Enter in your question WITH the answer(as the definition) here.
-    return question_list, q_and_a_dict
 
 
 def mode_responder(mode):
@@ -69,16 +59,19 @@ def mode_responder(mode):
                     print("Please enter in a valid time limit.")
             choice_loop2 = True
             while choice_loop2:
+                choice_loop1 = True
                 if how_much_time == 5 or how_much_time == 10 or how_much_time == 15 or how_much_time == 30 or \
                         how_much_time == 45 or how_much_time == 60:
                     confirmation = input(f"Are you sure you would like {how_much_time} seconds? This will give you a "
-                                         f"{multiplier}x multiplier.").lower()
-                    multiplier *= time_dict[how_much_time]
+                                         f"{time_dict[how_much_time]}x multiplier.").lower()
+                    multiplier = time_dict[how_much_time]
                     if confirmation == "y" or confirmation == "yes":
                         mode = input("Select your second mode: Normal, Hard, Expert").lower()
                         choice_loop2 = False
                         timed_loop = False
                         extra_text = " and Timed"
+                    elif confirmation == "n" or confirmation == "no":
+                        choice_loop2 = False
                 else:
                     print("Please enter in a valid time limit.")
                     choice_loop2 = False
@@ -110,7 +103,7 @@ def mode_responder(mode):
     elif mode == "expert+":
         choice_loop = True
         while choice_loop:
-            confirmation = input("Are you sure that you want Expert mode enabled? "
+            confirmation = input("Are you sure that you want Expert+ mode enabled? "
                                  f"This will give you a {multiplier * 8} multiplier.")
             if confirmation == "y" or confirmation == "yes":
                 choice_loop = False
@@ -130,8 +123,11 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
 
     if timed:
         timed_text = f"Questions answered too late:                    {questions_time_out}\n"
+        more_timed_text = f"Questions answered too late percentage:         " \
+                          f"{mtools.get_percent(questions_survived, questions_time_out)}%\n"
     else:
         timed_text = ""
+        more_timed_text = ""
 
     print(f"""Stats:
     Questions survived:                             {questions_survived}
@@ -143,7 +139,7 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     Correct question percentage:                    {mtools.get_percent(questions_survived, questions_correct)}%
     Incorrect question percentage:                  {mtools.get_percent(questions_survived, questions_incorrect)}%
     Unknown question percentage:                    {mtools.get_percent(questions_survived, questions_idk)}%
-
+    {more_timed_text}
     Longest question time:                          {mtools.round_to_decimal(longest, 2)}
     Shortest question time:                         {mtools.round_to_decimal(shortest, 2)}
     Average time per question:                      {mtools.round_to_decimal(average, 2)}

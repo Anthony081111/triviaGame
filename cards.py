@@ -4,7 +4,7 @@ import tools
 import chance
 
 
-def cards(seed, mode, points, hand, deck):
+def card_responder(mode, points, hand, deck):
     card_list = ["double", "triple", "safety", "half", "+1 multiplier", "+2 multiplier", "*1.5 multiplier",
                  "+2 temp multiplier", "+4 temp multiplier", "*3 temp multiplier", "+25 score", "*2 score", "free idk",
                  "mode swap", "temp mode swap"]
@@ -37,7 +37,7 @@ def cards(seed, mode, points, hand, deck):
                 if card_traded in hand:
                     confirm_loop = True
                     while confirm_loop:
-                        confirmation = input(f"Are you sure you would like to play the card, "
+                        confirmation = input(f"Are you sure you would like to trade the card, "
                                              f"\"{card_traded}\"?").lower()
                         if confirmation == "y" or confirmation == "yes":
                             length = len(hand)
@@ -68,6 +68,33 @@ def cards(seed, mode, points, hand, deck):
                     deck = mtools.shuffle_list(deck)
                 if confirmation == "n" or confirmation == "no":
                     confirm_loop = False
+
+
+def play_card(card, score=None, points=None, multiplier=None, mode=None, action=None):
+    if card == "double":
+        point = double(points)
+        return point, "points"
+    elif card == "triple":
+        point = triple(points)
+        return point, "points"
+    elif card == "+1 multiplier":
+        multipliers = add_one_multiplier(multiplier)
+        return multipliers
+    elif card == "+2 temp multiplier":
+        multipliers = add_two_multiplier(multiplier, True)
+        return multipliers
+    elif card == "+2 multiplier":
+        multipliers = add_two_multiplier(multiplier, False)
+        return multipliers
+    elif card == "+4 temp multiplier":
+        multipliers = add_four_multiplier(multiplier)
+        return multipliers
+    elif card == "*1.5 multiplier":
+        multipliers = times_one_one_half_multiplier(multiplier)
+        return multipliers
+    elif card == "*3 temp multiplier":
+        multipliers = times_three_multiplier(multiplier)
+        return multipliers
 
 
 def double(points):
@@ -142,4 +169,15 @@ def mode_change(mode, temp, multiplier):
         return "expert", multiplier / 2, temp
 
 
+def free_idk(action, original_score, score, timed_out, timed_punishment):
+    """Reset your score to what it was at the beginning of the turn if an "idk" action was used"""
+    if action == "idk" and not timed_out:
+        print(f"All points redeemed! Your score is now: {original_score}")
+        return original_score
+    elif action == "idk" and timed_out:
+        print(f"Points redeemed for \"idk\", but not for the time-out punishment. "
+              f"Your score is now: {original_score - timed_punishment}")
+        return original_score - timed_punishment
+    else:
+        print(f"No \"idk\" action taken, so no effect on points. Your score is now: {score}")
 

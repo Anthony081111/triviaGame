@@ -58,7 +58,7 @@ def revive(mode):
     revival_chance = random.randint(1, 100)
     if revival_chance in range(1, 5):
         print("It's not over yet...")
-        health_redeemed = random.randint(1, 100)
+        health_redeemed = random.randint(1, 27)
         if health_redeemed == 1:
             print("Full revival given!")
             return 15

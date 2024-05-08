@@ -1,11 +1,11 @@
 import random
-
+import trivia_questions as tq
 import math_tools as mtools
 import tools
 
 import time
 
-# question_list, q_and_a_dict = tools.get_dict()
+# question_list, q_and_a_dict = tq.get_dict()
 
 question_list = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
 q_and_a_dict = {"Q1": "A1", "Q2": "A2", "Q3": "A3", "Q4": "A4", "Q5": "A5", "Q6": "A6"}
@@ -13,9 +13,8 @@ q_and_a_dict = {"Q1": "A1", "Q2": "A2", "Q3": "A3", "Q4": "A4", "Q5": "A5", "Q6"
 score = 0
 overscore = 0
 
-set_number_i = 2      # Testing
-
 choice_loop = True
+mode_loop = True
 
 health = 15
 
@@ -41,8 +40,12 @@ print("Welcome to your standard trivia game! You are allowed to say, \"I don't k
 print("If the answer you said is close enough, you are allowed to type, \"whoops\" and it will mark the question as "
       "correct.")
 print("To stop, type: \"stop\"")
-mode = input("Select your mode: Free, Normal, Hard, Expert, Expert+, Chance, Timed").lower()
-mode, timed, timer, mode_loop, multiplier = tools.mode_responder(mode)
+while mode_loop:
+    try:
+        mode = input("Select your mode: Free, Normal, Hard, Expert, Expert+, Timed").lower()
+        mode, timed, timer, mode_loop, multiplier = tools.mode_responder(mode)
+    except TypeError:
+        pass
 
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
                    "game will begin").lower()
@@ -65,7 +68,7 @@ for i in range(len(q_and_a_dict)):
     lost = False
     question = mtools.random_item_from_list(question_list)
     try:
-        answer = q_and_a_dict[question]
+        answer = q_and_a_dict[question].lower()
     except KeyError:
         print("Sorry, the answer is not in the dictionary. We will fix this mistake when we can.")
         question_list.remove(question)
@@ -75,7 +78,7 @@ for i in range(len(q_and_a_dict)):
     while choice_loop:
         question_list.remove(question)
         start = time.time()
-        guess = input(f"The question is: \n{question}\nYour answer:")
+        guess = input(f"The question is: \n{question}\nYour answer:").lower()
         end = time.time()
         if guess == answer:
             questions_correct += 1
@@ -83,6 +86,8 @@ for i in range(len(q_and_a_dict)):
             overscore += 1*multiplier
             if mode == "free":
                 print("Correct!")
+                score += 1
+                overscore += 1
             else:
                 print(f"Correct! Your score now is: {overscore}")
             choice_loop = False
@@ -101,6 +106,8 @@ for i in range(len(q_and_a_dict)):
                 score -= 1*multiplier
                 overscore -= 1*multiplier
                 print(f"Your score is now: {overscore}")
+            elif mode == "free":
+                print("That's okay!")
             choice_loop = False
             ready = input("Type anything when ready.").lower()
 
@@ -126,9 +133,10 @@ for i in range(len(q_and_a_dict)):
             score = mtools.check_negative(score)
             overscore = mtools.check_negative(overscore)
             health = mtools.check_negative(health)
-            print(f"Your score is: {overscore}")
+            if mode != "free":
+                print(f"Your score is: {overscore}")
             ready = input("Type anything when ready.").lower()
-            if ready == "whoops" and mode != "hard" and mode != "expert":
+            if ready == "whoops" and mode != "hard" and mode != "expert" and mode != "expert+":
                 questions_override += 1
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
