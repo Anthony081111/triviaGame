@@ -87,7 +87,7 @@ def get_percent(whole, part):
     except KeyError:
         quit(79)
     try:
-        percent = whole/part * 100
+        percent = part/whole * 100
     except ZeroDivisionError:
         percent = 0
     return percent
