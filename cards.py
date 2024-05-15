@@ -1,7 +1,4 @@
-import random
 import math_tools as mtools
-import tools
-import chance
 
 
 def card_responder(mode, points, hand, deck):
@@ -70,7 +67,8 @@ def card_responder(mode, points, hand, deck):
                     confirm_loop = False
 
 
-def play_card(card, score=None, points=None, multiplier=None, mode=None, action=None):
+def play_card(card, score=None, points=None, multiplier=None, mode=None, action=None, original_score=None,
+              timed_out=None, timed_punishment=None):
     if card == "double":
         point = double(points)
         return point, "points"
@@ -79,22 +77,37 @@ def play_card(card, score=None, points=None, multiplier=None, mode=None, action=
         return point, "points"
     elif card == "+1 multiplier":
         multipliers = add_one_multiplier(multiplier)
-        return multipliers
+        return multipliers, "multiplier", False, multiplier
     elif card == "+2 temp multiplier":
         multipliers = add_two_multiplier(multiplier, True)
-        return multipliers
+        return multipliers, "multiplier", True, multiplier
     elif card == "+2 multiplier":
         multipliers = add_two_multiplier(multiplier, False)
-        return multipliers
+        return multipliers, "multiplier", False, multiplier
     elif card == "+4 temp multiplier":
         multipliers = add_four_multiplier(multiplier)
-        return multipliers
+        return multipliers, "multiplier", True, multiplier
     elif card == "*1.5 multiplier":
         multipliers = times_one_one_half_multiplier(multiplier)
-        return multipliers
+        return multipliers, "multiplier", False, multiplier
     elif card == "*3 temp multiplier":
         multipliers = times_three_multiplier(multiplier)
-        return multipliers
+        return multipliers, "multiplier", True, multiplier
+    elif card == "+25 score":
+        scores = add_twenty_five_score(score)
+        return scores, "score", False, score
+    elif card == "*2 score":
+        scores = double_score(score)
+        return scores, "score", False, score
+    elif card == "mode swap":
+        modes = mode_change(mode, False, multiplier)
+        return modes, "mode", False, mode
+    elif card == "temp mode swap":
+        modes = mode_change(mode, True, multiplier)
+        return modes, "mode", True, mode
+    elif card == "free idk":
+        scores = free_idk(action, original_score, score, timed_out, timed_punishment)
+        return scores, "set_score", False, score
 
 
 def double(points):

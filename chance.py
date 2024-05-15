@@ -55,8 +55,8 @@ def redeem_points(seed, mode, points, timed):
 def revive(mode):
     """If the player is out of lives, there is a slim chance they will be revived. Returns the amount of health given
     back upon revival."""
-    revival_chance = random.randint(1, 100)
-    if revival_chance in range(1, 5):
+    revival_chance = random.randint(1, 4)
+    if revival_chance == 1:
         print("It's not over yet...")
         health_redeemed = random.randint(1, 27)
         if health_redeemed == 1:
@@ -107,3 +107,8 @@ def revive(mode):
             return health
 
 
+def chance_mode_swap(mode):
+    if random.randint(1, 20) == 1:
+        decision = random.randint(1, 100)
+        if decision == 1:
+            mode_choice = input("Would you like to change your mode?")

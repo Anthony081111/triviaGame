@@ -1,14 +1,10 @@
-import random
 import trivia_questions as tq
 import math_tools as mtools
 import tools
 
 import time
 
-# question_list, q_and_a_dict = tq.get_dict()
-
-question_list = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
-q_and_a_dict = {"Q1": "A1", "Q2": "A2", "Q3": "A3", "Q4": "A4", "Q5": "A5", "Q6": "A6"}
+question_list, q_and_a_dict = tq.get_dict()
 
 score = 0
 overscore = 0
@@ -50,9 +46,6 @@ while mode_loop:
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
                    "game will begin").lower()
 
-seed = random.randint(1, 999999999)
-
-
 if help_maybe == "help":
     print(tools.get_help())
 elif help_maybe == "reset":
@@ -69,7 +62,9 @@ for i in range(len(q_and_a_dict)):
     question = mtools.random_item_from_list(question_list)
     try:
         answer = q_and_a_dict[question].lower()
+        printed_answer = q_and_a_dict[question]
     except KeyError:
+        print(question)
         print("Sorry, the answer is not in the dictionary. We will fix this mistake when we can.")
         question_list.remove(question)
         break
@@ -94,7 +89,7 @@ for i in range(len(q_and_a_dict)):
             ready = input("Type anything when ready.").lower()
 
         elif guess.lower() == "i dont know" or guess.lower() == "i don't know" or guess.lower() == "idk":
-            print(f"That's alright! The correct answer was: {answer}")
+            print(f"That's alright! The correct answer was: {printed_answer}")
             questions_idk += 1
             if mode != "expert" and mode != "free" and mode != "expert+":
                 print(f"Your score is still: {overscore}")
@@ -112,7 +107,7 @@ for i in range(len(q_and_a_dict)):
             ready = input("Type anything when ready.").lower()
 
         else:
-            print(f"Sadly, that's incorrect. The correct answer was: {answer}")
+            print(f"Sadly, that's incorrect. The correct answer was: {printed_answer}")
             questions_incorrect += 1
             if mode != "free" and mode != "hard" and mode != "expert" and mode != "expert+":
                 score -= 1
@@ -162,8 +157,12 @@ for i in range(len(q_and_a_dict)):
             print(f"You took too long to enter your answer. Your score is now: {overscore}")
 
         if health < 1:
-            shortest_time = min(time_list)
-            longest_time = max(time_list)
+            try:
+                shortest_time = min(time_list)
+                longest_time = max(time_list)
+            except ValueError:
+                shortest_time = "N/A"
+                longest_time = "N/A"
             average_time = mtools.get_average_list(time_list)
             stat_maybe = input(f"You're out of lives! Type anything to quit.")
 
@@ -185,8 +184,12 @@ for i in range(len(q_and_a_dict)):
 
         if ready == "stop":
 
-            shortest_time = min(time_list)
-            longest_time = max(time_list)
+            try:
+                shortest_time = min(time_list)
+                longest_time = max(time_list)
+            except ValueError:
+                shortest_time = "N/A"
+                longest_time = "N/A"
             average_time = mtools.get_average_list(time_list)
 
             if mode == "free":
@@ -210,8 +213,12 @@ for i in range(len(q_and_a_dict)):
                                           master, code, all_answered)
             quit()
 
-shortest_time = min(time_list)
-longest_time = max(time_list)
+try:
+    shortest_time = min(time_list)
+    longest_time = max(time_list)
+except ValueError:
+    shortest_time = "N/A"
+    longest_time = "N/A"
 average_time = mtools.get_average_list(time_list)
 all_answered = True
 
