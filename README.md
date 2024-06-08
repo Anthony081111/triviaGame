@@ -1,2 +1,3 @@
-# triviaGame
-Feel free to push out any APPROPRIATE(family-friendly) trivia questions!
+# Trivia Game
+
+This project is a trivia game with many different modes and questions.

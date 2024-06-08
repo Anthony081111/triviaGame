@@ -15,7 +15,8 @@ but only in normal or free mode.
 -->Normal: The normal way to play: Override codes, "I don't know" allowed.
 -->Timed: Can have any other mode mixed in. Timed just adds a timer per question of your choosing.
 -->Hard: No overrides and "I don't know" allowed.
--->Expert: You have 3 health. No overrides and a light punishment for "I don't know".
+-->Expert: You have 5 health. No overrides and a light punishment for "I don't know".
+-->Expert+: You have 3 health. No overrides and a light punishment for "I don't know".
 -->Free: No points, just basic fun."""
     return help_screen
 
@@ -128,7 +129,7 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     else:
         timed_text = ""
         more_timed_text = ""
-
+    print(f"")
     print(f"""Stats:
     Questions survived:                             {questions_survived}
     Questions answered correctly:                   {questions_correct}
@@ -136,9 +137,9 @@ def display_stats(timed, average, questions_survived, questions_correct, questio
     Questions answered with "I don't know":         {questions_idk}
     Questions with an override code used:           {questions_override}
     {timed_text}
-    Correct question percentage:                    {mtools.get_percent(questions_survived, questions_correct)}%
-    Incorrect question percentage:                  {mtools.get_percent(questions_survived, questions_incorrect)}%
-    Unknown question percentage:                    {mtools.get_percent(questions_survived, questions_idk)}%
+    Correct question percentage:                    {mtools.round_to_decimal(mtools.get_percent(questions_survived, questions_correct), 2)}%
+    Incorrect question percentage:                  {mtools.round_to_decimal(mtools.get_percent(questions_survived, questions_incorrect), 2)}%
+    Unknown question percentage:                    {mtools.round_to_decimal(mtools.get_percent(questions_survived, questions_idk), 2)}%
     {more_timed_text}
     Longest question time:                          {mtools.round_to_decimal(longest, 2)}
     Shortest question time:                         {mtools.round_to_decimal(shortest, 2)}
@@ -156,52 +157,52 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     bonus_score = score
 
     if questions_survived == questions_correct:
-        print(f"Complete success                                +{10*multiplier}")
+        print(f"    Complete success                                +{10*multiplier}")
         bonus_score += 10*multiplier
     if mtools.get_percent(questions_survived, questions_correct) >= 90:
-        print(f"A-range                                         +{5*multiplier}")
+        print(f"    A-range                                         +{5*multiplier}")
         bonus_score += 5*multiplier
     if mtools.get_percent(questions_survived, questions_correct) <= 59:
-        print(f"F-range                                         +{multiplier}")
+        print(f"    F-range                                         +{multiplier}")
         bonus_score += multiplier
     if mtools.get_percent(questions_survived, questions_correct) == 50:
-        print(f"Half and half                                   +{2*multiplier}")
+        print(f"    Half and half                                   +{2*multiplier}")
         bonus_score += 2*multiplier
     if questions_survived == questions_incorrect:
-        print(f"Complete failure                                +1")
+        print(f"    Complete failure                                +1")
         bonus_score += 1
     if master:
-        print(f"Master difficulty                               +{25*multiplier}")
+        print(f"    Master difficulty                               +{25*multiplier}")
         bonus_score += 25*multiplier
     if mtools.get_percent(questions_survived, questions_override) >= 50:
-        print(f"Cheater                                         +1")
+        print(f"    Cheater                                         +1")
         bonus_score += 1
     if questions_survived == questions_override:
-        print(f"Complete cheater                                +5")
+        print(f"    Complete cheater                                +5")
         bonus_score += 5
     if code:
-        print(f"Secret code                                     +1")
+        print(f"    Secret code                                     +1")
         bonus_score += 1
     if mtools.get_percent(questions_survived, questions_idk) >= 50:
-        print(f"No clue                                         +3")
+        print(f"    No clue                                         +3")
         bonus_score += 3
     if questions_survived == questions_idk:
-        print(f"Completely clueless                             +5")
+        print(f"    Completely clueless                             +5")
         bonus_score += 5
     if shortest < 1:
-        print(f"Lightening speed                                +{10*multiplier}")
+        print(f"    Lightening speed                                +{10*multiplier}")
         bonus_score += 10*multiplier
     if longest >= 180:
-        print(f"Slow                                            +{multiplier}")
+        print(f"    Slow                                            +{multiplier}")
         bonus_score += multiplier
     if shortest >= 180:
-        print(f"That's the fastest you can go?                  +{2*multiplier}")
+        print(f"    That's the fastest you can go?                  +{2*multiplier}")
         bonus_score += 2*multiplier
     if all_answered:
-        print(f"All questions answered                          +{questions_survived*multiplier}")
+        print(f"    All questions answered                          +{questions_survived*multiplier}")
         bonus_score += questions_survived*multiplier
 
-        print(f"Score with bonuses:                             {bonus_score}")
+    print(f"    Score with bonuses:                             {bonus_score}")
 
     """
     Bonuses:

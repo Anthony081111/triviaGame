@@ -7,4 +7,5 @@ select_int1 = 12345
 select_int2 = 7
 
 if __name__ == "__main__":
-    min(select_list)
+    a = 7.1459265358979323
+    print(f"{5/3:.2f}")

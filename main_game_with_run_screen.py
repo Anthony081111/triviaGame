@@ -1,3 +1,5 @@
+""""""
+
 import trivia_questions as tq
 import math_tools as mtools
 import tools
@@ -136,6 +138,7 @@ for i in range(len(q_and_a_dict)):
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
                 ready = input("Type anything when ready.").lower()
+
         elapsed_time = end - start
         time_list.append(elapsed_time)
         if timed and elapsed_time > timer+1:
@@ -200,7 +203,7 @@ for i in range(len(q_and_a_dict)):
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
                                    f"Your score with overrides is: {overscore}. Type anything to quit.")
 
-            stat_maybe.lower()
+            stat_maybe = stat_maybe.lower()
 
             if stat_maybe == "stats" or stat_maybe == "stat":
                 tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
