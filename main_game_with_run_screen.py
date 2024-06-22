@@ -5,12 +5,24 @@ import math_tools as mtools
 import tools
 
 import time
+import csv
+
+
+def save_scores(name, score):
+    """Saves scores in scores.csv."""
+    # try:
+    with open("scores.csv", "r") as temp:
+        reader = csv.reader(temp)
+        print(list(reader))
+    # except:
+    # print("Computer not computing.")
+
 
 question_list, q_and_a_dict = tq.get_dict()
 
 score = 0
 overscore = 0
-
+save_scores(score, overscore)
 choice_loop = True
 mode_loop = True
 
@@ -34,10 +46,12 @@ code = False
 
 total_points = 0
 
+
 print("Welcome to your standard trivia game! You are allowed to say, \"I don't know\" and you will not lose points.")
 print("If the answer you said is close enough, you are allowed to type, \"whoops\" and it will mark the question as "
       "correct.")
 print("To stop, type: \"stop\"")
+name = input("What is your name? ")
 while mode_loop:
     try:
         mode = input("Select your mode: Free, Normal, Hard, Expert, Expert+, Timed").lower()
@@ -46,7 +60,7 @@ while mode_loop:
         pass
 
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
-                   "game will begin").lower()
+                   "game will begin. ").lower()
 
 if help_maybe == "help":
     print(tools.get_help())
@@ -54,7 +68,7 @@ elif help_maybe == "reset":
     quit()
 elif help_maybe == "bonus":
     confirmation = input(f"Bonuses will mean your multiplier will be: {multiplier*0.5}. "
-                         f"Do you want them enabled?").lower()
+                         f"Do you want them enabled? ").lower()
     if confirmation == "y" or confirmation == "yes":
         multiplier *= 0.5
         bonus = True
@@ -75,7 +89,7 @@ for i in range(len(q_and_a_dict)):
     while choice_loop:
         question_list.remove(question)
         start = time.time()
-        guess = input(f"The question is: \n{question}\nYour answer:").lower()
+        guess = input(f"The question is: \n{question}\nYour answer: ").lower()
         end = time.time()
         if guess == answer:
             questions_correct += 1
@@ -88,7 +102,7 @@ for i in range(len(q_and_a_dict)):
             else:
                 print(f"Correct! Your score now is: {overscore}")
             choice_loop = False
-            ready = input("Type anything when ready.").lower()
+            ready = input("Type anything when ready. ").lower()
 
         elif guess.lower() == "i dont know" or guess.lower() == "i don't know" or guess.lower() == "idk":
             print(f"That's alright! The correct answer was: {printed_answer}")
@@ -106,7 +120,7 @@ for i in range(len(q_and_a_dict)):
             elif mode == "free":
                 print("That's okay!")
             choice_loop = False
-            ready = input("Type anything when ready.").lower()
+            ready = input("Type anything when ready. ").lower()
 
         else:
             print(f"Sadly, that's incorrect. The correct answer was: {printed_answer}")
@@ -132,12 +146,12 @@ for i in range(len(q_and_a_dict)):
             health = mtools.check_negative(health)
             if mode != "free":
                 print(f"Your score is: {overscore}")
-            ready = input("Type anything when ready.").lower()
+            ready = input("Type anything when ready. ").lower()
             if ready == "whoops" and mode != "hard" and mode != "expert" and mode != "expert+":
                 questions_override += 1
                 overscore += 2
                 print(f"Oh! My bad! Your score is: {overscore}")
-                ready = input("Type anything when ready.").lower()
+                ready = input("Type anything when ready. ").lower()
 
         elapsed_time = end - start
         time_list.append(elapsed_time)
@@ -167,7 +181,7 @@ for i in range(len(q_and_a_dict)):
                 shortest_time = "N/A"
                 longest_time = "N/A"
             average_time = mtools.get_average_list(time_list)
-            stat_maybe = input(f"You're out of lives! Type anything to quit.")
+            stat_maybe = input(f"You're out of lives! Type anything to quit. ")
 
             stat_maybe.lower()
 
@@ -196,12 +210,12 @@ for i in range(len(q_and_a_dict)):
             average_time = mtools.get_average_list(time_list)
 
             if mode == "free":
-                stat_maybe = input("Okay! Thanks for playing! Type anything to quit.")
+                stat_maybe = input("Okay! Thanks for playing! Type anything to quit. ")
             elif mode == "hard" or mode == "expert" or mode == "expert+":
-                stat_maybe = input(f"Okay! Thanks for playing! Your score is: {score}. Type anything to quit.")
+                stat_maybe = input(f"Okay! Thanks for playing! Your score is: {score}. Type anything to quit. ")
             else:
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
-                                   f"Your score with overrides is: {overscore}. Type anything to quit.")
+                                   f"Your score with overrides is: {overscore}. Type anything to quit. ")
 
             stat_maybe = stat_maybe.lower()
 
@@ -226,13 +240,13 @@ average_time = mtools.get_average_list(time_list)
 all_answered = True
 
 if mode == "free":
-    stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. Type anything to quit.")
+    stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. Type anything to quit. ")
 elif mode == "hard" or mode == "expert":
     stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. But anyways, your score is: {score}. "
-                       f"Type anything to quit.")
+                       f"Type anything to quit. ")
 else:
     stat_maybe = input(f"Oh! It looks like we're out of questions... somehow. But anyways, your score without "
-                       f"overrides is: {score}. Your score with overrides is: {overscore}. Type anything to quit.")
+                       f"overrides is: {score}. Your score with overrides is: {overscore}. Type anything to quit. ")
 stat_maybe.lower()
 
 if stat_maybe == "stats" or stat_maybe == "stat":
