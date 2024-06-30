@@ -3,26 +3,15 @@
 import trivia_questions as tq
 import math_tools as mtools
 import tools
+import trivia_scores as ts
 
 import time
 import csv
-
-
-def save_scores(name, score):
-    """Saves scores in scores.csv."""
-    # try:
-    with open("scores.csv", "r") as temp:
-        reader = csv.reader(temp)
-        print(list(reader))
-    # except:
-    # print("Computer not computing.")
-
 
 question_list, q_and_a_dict = tq.get_dict()
 
 score = 0
 overscore = 0
-save_scores(score, overscore)
 choice_loop = True
 mode_loop = True
 
@@ -194,6 +183,7 @@ for i in range(len(q_and_a_dict)):
                                           questions_incorrect, questions_idk, questions_time_out, questions_override,
                                           longest_time, shortest_time, overscore, score, total_points, multiplier,
                                           master, code, all_answered)
+            ts.save_scores(name, score)
             quit()
 
         questions_survived += 1
@@ -228,6 +218,7 @@ for i in range(len(q_and_a_dict)):
                                           questions_incorrect, questions_idk, questions_time_out, questions_override,
                                           longest_time, shortest_time, overscore, score, total_points, multiplier,
                                           master, code, all_answered)
+            ts.save_scores(name, score)
             quit()
 
 try:
@@ -257,3 +248,4 @@ if stat_maybe == "stats" or stat_maybe == "stat":
         tools.display_bonuses(timed, average_time, questions_survived, questions_correct, questions_incorrect,
                               questions_idk, questions_time_out, questions_override, longest_time, shortest_time,
                               overscore, score, total_points, multiplier, master, code, all_answered)
+ts.save_scores(name, score)

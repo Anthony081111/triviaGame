@@ -77,13 +77,22 @@ def mode_responder(mode):
                     print("Please enter in a valid time limit.")
                     choice_loop2 = False
 
-    if mode == "hard":
+    if mode == "normal":
+        choice_loop = True
+        while choice_loop:
+            confirmation = input("Are you sure that you want Expert+ mode enabled? "
+                                 f"This will give you a {multiplier}x multiplier.")
+            if confirmation == "y" or confirmation == "yes":
+                return "normal", timed, how_much_time, False, multiplier
+            elif confirmation == "n" or confirmation == "no":
+                choice_loop = False
+
+    elif mode == "hard":
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Hard mode enabled? "
-                                 f"This will give you a {multiplier * 2} multiplier.").lower()
+                                 f"This will give you a {multiplier * 2}x multiplier.").lower()
             if confirmation == "y" or confirmation == "yes":
-                choice_loop = False
                 multiplier *= 2
                 return "hard", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
@@ -93,9 +102,8 @@ def mode_responder(mode):
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Expert mode enabled? "
-                                 f"This will give you a {multiplier * 4} multiplier.").lower()
+                                 f"This will give you a {multiplier * 4}x multiplier.").lower()
             if confirmation == "y" or confirmation == "yes":
-                choice_loop = False
                 multiplier *= 4
                 return "expert", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
@@ -105,17 +113,26 @@ def mode_responder(mode):
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Expert+ mode enabled? "
-                                 f"This will give you a {multiplier * 8} multiplier.")
+                                 f"This will give you a {multiplier * 8}x multiplier.")
             if confirmation == "y" or confirmation == "yes":
-                choice_loop = False
                 multiplier *= 8
                 return "expert+", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
                 choice_loop = False
 
-    else:
-        print(f"Defaulting to Normal{extra_text} mode.")
-        return "normal", timed, how_much_time, False, multiplier
+    elif mode == "master":
+        print("This mode is not complete yet.")
+        """choice_loop = True
+        while choice_loop:
+            confirmation = input("Are you sure that you want Master mode enabled? "
+                                 f"This will give you a {multiplier * 10}x multiplier.")
+            if confirmation == "y" or confirmation == "yes":
+                choice_loop = False
+                multiplier *= 10
+                return "master", timed, how_much_time, False, multiplier
+            elif confirmation == "n" or confirmation == "no":
+                choice_loop = False"""
+
 
 
 def display_stats(timed, average, questions_survived, questions_correct, questions_incorrect, questions_idk,
