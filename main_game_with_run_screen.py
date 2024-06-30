@@ -48,6 +48,9 @@ while mode_loop:
     except TypeError:
         pass
 
+if mode == "master":
+    master = True
+
 help_maybe = input("If you would like to learn more, type: \"help\" and you'll be given a list of rules. If not, the "
                    "game will begin. ").lower()
 
@@ -55,12 +58,15 @@ if help_maybe == "help":
     print(tools.get_help())
 elif help_maybe == "reset":
     quit()
+elif help_maybe == "bonus" and master:
+    print("Master difficulty is enabled. You cannot enable bonuses as well.")
 elif help_maybe == "bonus":
     confirmation = input(f"Bonuses will mean your multiplier will be: {multiplier*0.5}. "
                          f"Do you want them enabled? ").lower()
     if confirmation == "y" or confirmation == "yes":
         multiplier *= 0.5
         bonus = True
+
 
 for i in range(len(q_and_a_dict)):
     lost = False
@@ -129,6 +135,10 @@ for i in range(len(q_and_a_dict)):
                 score -= 1*multiplier
                 overscore -= 1*multiplier
                 health -= 5
+            elif mode == "master":
+                score = 0
+                overscore = 0
+                health -= 15
             choice_loop = False
             score = mtools.check_negative(score)
             overscore = mtools.check_negative(overscore)
@@ -155,6 +165,10 @@ for i in range(len(q_and_a_dict)):
                     health -= 3
                 elif not lost and mode == "expert+":
                     health -= 5
+            elif mode == "master":
+                score = 0
+                overscore = 0
+                health -= 15
 
             questions_time_out += 1
             score = mtools.check_negative(score)
@@ -199,27 +213,42 @@ for i in range(len(q_and_a_dict)):
                 longest_time = "N/A"
             average_time = mtools.get_average_list(time_list)
 
+            nevermind = False
+
             if mode == "free":
                 stat_maybe = input("Okay! Thanks for playing! Type anything to quit. ")
             elif mode == "hard" or mode == "expert" or mode == "expert+":
                 stat_maybe = input(f"Okay! Thanks for playing! Your score is: {score}. Type anything to quit. ")
+            elif mode == "master":
+                confirmation = input("A score of 0 will be saved if you stop now. Are you sure you would like to "
+                                     "end here?").lower()
+                choice_loop = True
+                while choice_loop:
+                    if confirmation == "y" or confirmation == "yes":
+                        score = 0
+                        overscore = 0
+                        health -= 15
+                        stat_maybe = input(f"Okay! Thanks for playing! Your score is: 0. Type anything to quit")
+                        choice_loop = False
+                    elif confirmation == "n" or confirmation == "no":
+                        nevermind = True
             else:
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
                                    f"Your score with overrides is: {overscore}. Type anything to quit. ")
+            if nevermind:
+                stat_maybe = stat_maybe.lower()
 
-            stat_maybe = stat_maybe.lower()
-
-            if stat_maybe == "stats" or stat_maybe == "stat":
-                tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
-                                    questions_idk, questions_override, questions_time_out, longest_time, shortest_time,
-                                    overscore, score, total_points)
-                if bonus:
-                    tools.display_bonuses(timed, average_time, questions_survived, questions_correct,
-                                          questions_incorrect, questions_idk, questions_time_out, questions_override,
-                                          longest_time, shortest_time, overscore, score, total_points, multiplier,
-                                          master, code, all_answered)
-            ts.save_scores(name, score)
-            quit()
+                if stat_maybe == "stats" or stat_maybe == "stat":
+                    tools.display_stats(timed, average_time, questions_survived, questions_correct, questions_incorrect,
+                                        questions_idk, questions_override, questions_time_out, longest_time, shortest_time,
+                                        overscore, score, total_points)
+                    if bonus:
+                        tools.display_bonuses(timed, average_time, questions_survived, questions_correct,
+                                              questions_incorrect, questions_idk, questions_time_out, questions_override,
+                                              longest_time, shortest_time, overscore, score, total_points, multiplier,
+                                              master, code, all_answered)
+                ts.save_scores(name, score)
+                quit()
 
 try:
     shortest_time = min(time_list)

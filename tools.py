@@ -122,16 +122,17 @@ def mode_responder(mode):
 
     elif mode == "master":
         print("This mode is not complete yet.")
-        """choice_loop = True
+        choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Master mode enabled? "
-                                 f"This will give you a {multiplier * 10}x multiplier.")
+                                 "This will give you a 10x multiplier. You cannot have timed mode enabled with this "
+                                 "mode. You'll lose all of your points if you don't answer each question "
+                                 "correctly within 10 seconds. You must answer all the questions with one life.")
             if confirmation == "y" or confirmation == "yes":
-                choice_loop = False
-                multiplier *= 10
-                return "master", timed, how_much_time, False, multiplier
+                multiplier = 10
+                return "master", True, 10, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False"""
+                choice_loop = False
 
 
 
@@ -188,9 +189,6 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     if questions_survived == questions_incorrect:
         print(f"    Complete failure                                +1")
         bonus_score += 1
-    if master:
-        print(f"    Master difficulty                               +{25*multiplier}")
-        bonus_score += 25*multiplier
     if mtools.get_percent(questions_survived, questions_override) >= 50:
         print(f"    Cheater                                         +1")
         bonus_score += 1
