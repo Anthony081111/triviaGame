@@ -217,7 +217,7 @@ def chance_mode_swap(mode):
     else:
         return mode
 
-def random_points_gain_or_loss(correct_questions, incorrect_questions, total_questions, multiplier, mode, idk_questions, total_runs, loss_runs, gain_runs):
+def random_points_gain_or_loss(correct_questions, incorrect_questions, total_questions, multiplier, mode, idk_questions, loss_runs, gain_runs):
     mode_dict = {"free": -30, "normal": 0, "hard": 10, "expert": 30, "expert+": 50}
     loss_chance = mode_dict[mode]
     gain_chance = 15
@@ -237,5 +237,5 @@ def random_points_gain_or_loss(correct_questions, incorrect_questions, total_que
         loss_chance += 5
 
     loss_chance += gain_runs * 10
-    gain_chance += gain_runs * 10
+    gain_chance += loss_runs * 10
 
