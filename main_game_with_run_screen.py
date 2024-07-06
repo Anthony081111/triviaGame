@@ -197,7 +197,7 @@ for i in range(len(q_and_a_dict)):
                                           questions_incorrect, questions_idk, questions_time_out, questions_override,
                                           longest_time, shortest_time, overscore, score, total_points, multiplier,
                                           master, code, all_answered)
-            ts.save_scores(name, score)
+            ts.save_scores_csv(name, score)
             quit()
 
         questions_survived += 1
@@ -235,7 +235,7 @@ for i in range(len(q_and_a_dict)):
             else:
                 stat_maybe = input(f"Okay! Thanks for playing! Your score without overrides is: {score}. "
                                    f"Your score with overrides is: {overscore}. Type anything to quit. ")
-            if nevermind:
+            if not nevermind:
                 stat_maybe = stat_maybe.lower()
 
                 if stat_maybe == "stats" or stat_maybe == "stat":
@@ -247,7 +247,7 @@ for i in range(len(q_and_a_dict)):
                                               questions_incorrect, questions_idk, questions_time_out, questions_override,
                                               longest_time, shortest_time, overscore, score, total_points, multiplier,
                                               master, code, all_answered)
-                ts.save_scores(name, score)
+                ts.save_scores_csv(name, score)
                 quit()
 
 try:
@@ -277,4 +277,4 @@ if stat_maybe == "stats" or stat_maybe == "stat":
         tools.display_bonuses(timed, average_time, questions_survived, questions_correct, questions_incorrect,
                               questions_idk, questions_time_out, questions_override, longest_time, shortest_time,
                               overscore, score, total_points, multiplier, master, code, all_answered)
-ts.save_scores(name, score)
+ts.save_scores_csv(name, score)

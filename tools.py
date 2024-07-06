@@ -80,7 +80,7 @@ def mode_responder(mode):
     if mode == "normal":
         choice_loop = True
         while choice_loop:
-            confirmation = input("Are you sure that you want Expert+ mode enabled? "
+            confirmation = input("Are you sure that you want normal mode enabled? "
                                  f"This will give you a {multiplier}x multiplier.")
             if confirmation == "y" or confirmation == "yes":
                 return "normal", timed, how_much_time, False, multiplier
