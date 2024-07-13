@@ -76,7 +76,7 @@ def get_dict():
                     "What is the chemical symbol for water?": "H2O",
                     "Which is the largest mammal in the world?": "Blue Whale",
                     "In the periodic table, what is the symbol for gold?": "Au",
-                    "What is the boiling point of water in degrees Celsius?": "100 degrees" or "100",
+                    "What is the boiling point of water in degrees Celsius?": "100",
                     "What kind of animal is a Komodo dragon?": "Lizard",
                     "What type of pasta's name means 'little worms'?": "Vermicelli",
                     "Champagne is a sparkling wine from a region in which country?": "France",

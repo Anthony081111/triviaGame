@@ -24,7 +24,6 @@ def save_scores(name, score):
         print("Scores not saved.")
         quit()
     list_of_players = data.keys()
-    print(list_of_players)
     if name in list_of_players:
         hscore = data[name]["highscore"]
         if hscore < score:
@@ -46,7 +45,6 @@ def save_scores_csv(name, score):
             for row in reader:
                 data = row
                 data_list.append(data)
-                print(data_list)
     except Exception as e:
         print(f"Exception message: {str(e)}")
         print("Scores not saved.")

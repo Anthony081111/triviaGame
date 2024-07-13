@@ -26,11 +26,9 @@ def mode_responder(mode):
     """Select a mode based on an input from the main program."""
     how_much_time = 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     timed = False
-    extra_text = ""
     time_dict = {5: 3, 10: 2.5, 15: 2, 30: 1.75, 45: 1.5, 60: 1.25}
     multiplier = 1
     choice_loop = True
-    stopped = False
 
     if mode == "free":
         while choice_loop:
@@ -38,7 +36,7 @@ def mode_responder(mode):
             if confirmation == "y" or confirmation == "yes":
                 return "free", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
     elif mode == "timed":
         timed = True
@@ -46,9 +44,8 @@ def mode_responder(mode):
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure you want Timed mode?").lower()
-            if confirmation == "n" and confirmation == "no":
-                timed = False
-                timed_loop = False
+            if confirmation == "n" or confirmation == "no":
+                return 0, 0, 0, True, 0
             elif confirmation == "y" or confirmation == "yes":
                 choice_loop = False
         choice_loop1 = True
@@ -71,7 +68,6 @@ def mode_responder(mode):
                         mode = input("Select your second mode: Normal, Hard, Expert").lower()
                         choice_loop2 = False
                         timed_loop = False
-                        extra_text = " and Timed"
                     elif confirmation == "n" or confirmation == "no":
                         choice_loop2 = False
                 else:
@@ -86,7 +82,7 @@ def mode_responder(mode):
             if confirmation == "y" or confirmation == "yes":
                 return "normal", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
     elif mode == "hard":
         choice_loop = True
@@ -97,7 +93,7 @@ def mode_responder(mode):
                 multiplier *= 2
                 return "hard", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
     elif mode == "expert":
         choice_loop = True
@@ -108,7 +104,7 @@ def mode_responder(mode):
                 multiplier *= 4
                 return "expert", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
     elif mode == "expert+":
         choice_loop = True
@@ -119,10 +115,9 @@ def mode_responder(mode):
                 multiplier *= 8
                 return "expert+", timed, how_much_time, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
     elif mode == "master":
-        print("This mode is not complete yet.")
         choice_loop = True
         while choice_loop:
             confirmation = input("Are you sure that you want Master mode enabled? "
@@ -133,7 +128,7 @@ def mode_responder(mode):
                 multiplier = 10
                 return "master", True, 10, False, multiplier
             elif confirmation == "n" or confirmation == "no":
-                choice_loop = False
+                return 0, 0, 0, True, 0
 
 
 
