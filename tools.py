@@ -1,5 +1,5 @@
 import math_tools as mtools
-# hi
+import json
 
 
 def get_help():
@@ -222,5 +222,18 @@ def display_bonuses(timed, average, questions_survived, questions_correct, quest
     """
 
 
+def add_question():
+    """Add a question and an answer to the trivia file."""
+    question = input("What is the question you want to add?   ")
+    answer = input("What is the answer to that question?   ")
+    with open("trivia_questions.json", "r") as file:
+        q_and_a_dict = json.load(file)
+    q_and_a_dict[question] = answer
+    with open("trivia_questions.json", "w") as file:
+        json.dump(q_and_a_dict, file, indent=4)
+    with open("trivia_questions.json", "r") as file:
+        print(json.load(file))
+
+
 if __name__ == "__main__":
-    print("Wrong file doofus.")
+    add_question()

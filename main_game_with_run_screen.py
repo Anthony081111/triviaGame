@@ -1,14 +1,19 @@
 """"""
 
-import trivia_questions as tq
 import math_tools as mtools
 import tools
 import trivia_scores as ts
 
 import time
-import csv
+import json
 
-question_list, q_and_a_dict = tq.get_dict()
+with open("trivia_questions.json", "r") as file:
+    q_and_a_dict = json.load(file)
+    question_list = list(q_and_a_dict.keys())
+    print(question_list, q_and_a_dict)
+
+
+
 
 score = 0
 overscore = 0
